@@ -2,42 +2,47 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:insert="~{fragments/fragments :: header}"/>
 <body>
-<div class="container-fluid text-center">
-    <div></div><h2>Manage events</h2></div>
-    <div class="m-2">
-        <a class="h3" th:href="@{/events/add}">New event</a>
+<th:block th:insert="~{fragments/fragments :: navbar}"/>
+<div class="container">
+    <div class="row">
+        <h2> Event List </h2>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <a th:href="@{/events/add}" class="btn btn-primary btn-sm mb-3"> Add Event</a>
+        </div>
     </div>
     <div th:if="${message}" class="alert alert-success text-center" th:text="${message}">
     </div>
     <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}">
     </div>
-    <div>
-        <table class="table table-bordered">
-            <thead class="table-dark">
+    <table class="table table-striped table-bordered col-sm-12">
+        <thead class="table-dark">
+        <tr>
+            <th>Event Name</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--/*@thymesVar id="eventList" type="java.util.List"*/-->
+        <th:block th:each="e : ${eventList}">
             <tr>
-                <th>Event Name</th>
-                <th>Description</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th></th>
+                <td th:text="${e.name}"/>
+                <td th:text="${e.description}"/>
+                <td th:text="${#dates.format(e.date, 'dd. MM. yyyy')}"/>
+                <td th:text="${e.time}"/>
+                <td>
+                    <a class="btn btn-primary" th:href="@{/events/edit/} + ${e.id}">Edit</a>
+                    <!--@{/events/edit/{id}(id=${e.id})}-->
+                    <a class="btn btn-danger" th:href="@{/events/delete/} + ${e.id}">Delete</a>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            <th:block th:each="e : ${eventList}">
-                <tr>
-                    <td th:text="${e.name}" />
-                    <td th:text="${e.description}" />
-                    <td th:text="${#dates.format(e.date, 'dd. MM. yyyy')}" />
-                    <td th:text="${e.time}" />
-                    <td>
-                        <a class="h4 me-3 text-decoration-none" th:href="@{/events/edit/} + ${e.id}">Edit</a>
-                        <a class="h4 text-decoration-none" th:href="@{/events/delete/} + ${e.id}">Delete</a>
-                    </td>
-                </tr>
-            </th:block>
-            </tbody>
-        </table>
-    </div>
+        </th:block>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
